@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="MetaPersona Dashboard — Manage your complete digital life." />
+  <title>Dashboard — MetaPersona</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="/css/global.css" />
+  <link rel="stylesheet" href="/css/dashboard.css" />
+</head>
+<body>
+  <div class="bg-animated"></div>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- ======================== -->
+  <!-- APP SHELL                -->
+  <!-- ======================== -->
+  <div class="app-shell">
+
+    <!-- ======================== -->
+    <!-- SIDEBAR                  -->
+    <!-- ======================== -->
+    <aside class="sidebar" id="sidebar" aria-label="Navigation">
+      <a href="/" class="sidebar-logo">
+        <div class="logo-icon">🌟</div>
+        <span class="logo-text">MetaPersona</span>
+      </a>
+
+      <nav class="sidebar-nav" aria-label="Dashboard Navigation">
+        <span class="nav-section-label">Dashboard</span>
+        <button class="nav-item active" data-section="overview">
+          <span class="nav-item-icon">🏠</span> Overview
+        </button>
+
+        <span class="nav-section-label">Life Data</span>
+        <button class="nav-item" data-section="personal">
+          <span class="nav-item-icon">👤</span> Personal Info
+        </button>
+        <button class="nav-item" data-section="education">
+          <span class="nav-item-icon">📚</span> Education
+        </button>
+        <button class="nav-item" data-section="career">
+          <span class="nav-item-icon">💼</span> Career
+        </button>
+        <button class="nav-item" data-section="achievements">
+          <span class="nav-item-icon">🏆</span> Achievements
+        </button>
+        <button class="nav-item" data-section="timeline">
+          <span class="nav-item-icon">📅</span> Timeline
+        </button>
+        <button class="nav-item" data-section="goals">
+          <span class="nav-item-icon">🎯</span> Goals
+        </button>
+        <button class="nav-item" data-section="memories">
+          <span class="nav-item-icon">⭐</span> Memories
+        </button>
+        <button class="nav-item" data-section="documents">
+          <span class="nav-item-icon">📄</span> Documents
+        </button>
+
+        <span class="nav-section-label">Secure</span>
+        <button class="nav-item" data-section="folders">
+          <span class="nav-item-icon">🔒</span> Private Folders
+        </button>
+
+        <span class="nav-section-label">Account</span>
+        <button class="nav-item" data-section="settings">
+          <span class="nav-item-icon">⚙️</span> Settings
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card" id="sidebar-user-card">
+          <div class="user-avatar" id="sidebar-avatar">?</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebar-name">Loading...</div>
+            <div class="user-role" id="sidebar-role">User</div>
+          </div>
+          <span style="color:var(--text-muted);font-size:0.8rem;">⚙️</span>
+        </div>
+        <button class="btn btn-danger btn-full btn-sm" id="btn-logout" style="margin-top:8px;">
+          🚪 Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ======================== -->
+    <!-- MAIN CONTENT             -->
+    <!-- ======================== -->
+    <div class="main-content">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <button class="topbar-menu-btn" id="topbar-menu-btn" aria-label="Toggle Sidebar">☰</button>
+        <h1 class="topbar-title" id="topbar-title">Overview</h1>
+        <div class="topbar-actions">
+          <div class="topbar-user" id="topbar-user">
+            <span>👤</span>
+            <span id="topbar-username">User</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Container -->
+      <div class="page-container">
+
+        <!-- ====================== -->
+        <!-- OVERVIEW               -->
+        <!-- ====================== -->
+        <section class="section-page active" id="section-overview">
+          <div class="overview-profile" id="overview-profile">
+            <div class="overview-avatar" id="overview-avatar">?</div>
+            <div class="overview-profile-info">
+              <h2 id="overview-name">Loading...</h2>
+              <p id="overview-email">...</p>
+              <span class="badge badge-primary" id="overview-role">User</span>
+            </div>
+          </div>
+
+          <div class="stats-grid" id="stats-grid">
+            <!-- Stats injected by JS -->
+          </div>
+
+          <div class="page-header" style="margin-top:32px;">
+            <div class="page-header-text">
+              <h2>Quick Actions</h2>
+              <p>Jump to any section to manage your life data</p>
+            </div>
+          </div>
+
+          <div class="cards-grid" id="overview-quick-cards">
+            <!-- Quick action cards injected by JS -->
+          </div>
+        </section>
+
+        <!-- ====================== -->
+        <!-- PERSONAL INFO           -->
+        <!-- ====================== -->
+        <section class="section-page" id="section-personal">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h2>👤 Personal Information</h2>
+              <p>Your core identity data — keep it updated</p>
+            </div>
+            <button class="btn btn-primary" id="btn-save-personal">💾 Save Changes</button>
+          </div>
+
+          <form id="personal-form" class="glass-card">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" name="phone" id="pi-phone" class="form-input" placeholder="+1 234 567 8900" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Date of Birth</label>
+                <input type="date" name="dateOfBirth" id="pi-dob" class="form-input" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Gender</label>
+                <select name="gender" id="pi-gender" class="form-input">
+                  <option value="">Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Non-binary">Non-binary</option>
+                  <option value="Prefer not to say">Prefer not to say</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nationality</label>
+                <input type="text" name="nationality" id="pi-nationality" class="form-input" placeholder="e.g., Indian, American" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Bio / About Me</label>
+              <textarea name="bio" id="pi-bio" class="form-input" rows="3" placeholder="Tell your story in a few words..."></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">City</label>
+                <input type="text" name="city" id="pi-city" class="form-input" placeholder="Mumbai" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Country</label>
+                <input type="text" name="country" id="pi-country" class="form-input" placeholder="India" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Address</label>
+              <input type="text" name="address" id="pi-address" class="form-input" placeholder="123 Main Street" />
+            </div>
+
+            <hr style="border:none;border-top:1px solid var(--color-border);margin:var(--space-5) 0;" />
+            <h4 style="margin-bottom:var(--space-4);color:var(--text-secondary);">🌐 Online Presence</h4>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Website / Portfolio</label>
+                <input type="url" name="website" id="pi-website" class="form-input" placeholder="https://yoursite.com" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">LinkedIn</label>
+                <input type="url" name="linkedin" id="pi-linkedin" class="form-input" placeholder="https://linkedin.com/in/you" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">GitHub</label>
+                <input type="url" name="github" id="pi-github" class="form-input" placeholder="https://github.com/you" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Twitter / X</label>
+                <input type="url" name="twitter" id="pi-twitter" class="form-input" placeholder="https://twitter.com/you" />
+              </div>
+            </div>
+
+            <hr style="border:none;border-top:1px solid var(--color-border);margin:var(--space-5) 0;" />
+            <h4 style="margin-bottom:var(--space-4);color:var(--text-secondary);">🎓 Skills & Interests</h4>
+
+            <div class="form-group">
+              <label class="form-label">Skills <span class="text-muted">(comma separated)</span></label>
+              <input type="text" name="skills" id="pi-skills" class="form-input" placeholder="JavaScript, React, Node.js, Python..." />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Languages <span class="text-muted">(comma separated)</span></label>
+              <input type="text" name="languages" id="pi-languages" class="form-input" placeholder="English, Hindi, Spanish..." />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Interests <span class="text-muted">(comma separated)</span></label>
+              <input type="text" name="interests" id="pi-interests" class="form-input" placeholder="Reading, Coding, Travelling..." />
+            </div>
+          </form>
+        </section>
+
+        <!-- ====================== -->
+        <!-- EDUCATION              -->
+        <!-- ====================== -->
+        <section class="section-page" id="section-education">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h2>📚 Education</h2>
+              <p>Your academic journey and qualifications</p>
+            </div>
+            <button class="btn btn-primary" id="btn-add-education">➕ Add Education</button>
+          </div>
+          <div class="cards-grid" id="education-list">
+            <div class="empty-state">
+              <div class="empty-state-icon">📚</div>
+              <h3>No education added yet</h3>
+              <p>Click "Add Education" to get started</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================== -->
+        <!-- CAREER                 -->
+        <!-- ====================== -->
+        <section class="section-page" id="section-career">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h2>💼 Career</h2>
+              <p>Your professional work history</p>
+            </div>
+            <button class="btn btn-primary" id="btn-add-career">➕ Add Experience</button>
+          </div>
+          <div class="cards-grid" id="career-list">
+            <div class="empty-state">
+              <div class="empty-state-icon">💼</div>
+              <h3>No career history yet</h3>
+              <p>Add your work experience</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================== -->
+        <!-- ACHIEVEMENTS            -->
+        <!-- ====================== -->
+        <section class="section-page" id="section-achievements">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h2>🏆 Achievements</h2>
+              <p>Awards, certificates, and proud moments</p>
+            </div>
+            <button class="btn btn-primary" id="btn-add-achievement">➕ Add Achievement</button>
+          </div>
+          <div class="cards-grid" id="achievements-list">
+            <div class="empty-state">
+              <div class="empty-state-icon">🏆</div>
+              <h3>No achievements yet</h3>
+              <p>Start documenting your wins!</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================== -->
+        <!-- TIMELINE               -->
+        <!-- ====================== -->
+        <section class="section-page" id="section-timeline">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h2>📅 Life Timeline</h2>
+              <p>The story of your life, event by event</p>
+            </div>
+            <button class="btn btn-primary" id="btn-add-timeline">➕ Add Event</button>
+          </div>
+          <div class="timeline-list" id="timeline-list">
+            <div class="empty-state">
+              <div class="empty-state-icon">📅</div>
+              <h3>Timeline is empty</h3>
+              <p>Add your first life event!</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================== -->
+        <!-- GOALS                  -->
+        <!-- ====================== -->
+        <section class="section-page" id="section-goals">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h2>🎯 Goals</h2>
+              <p>Plan, track, and crush your goals</p>
+            </div>
+            <button class="btn btn-primary" id="btn-add-goal">➕ Add Goal</button>
+          </div>
+          <div id="goals-list">
+            <div class="empty-state">
+              <div class="empty-state-icon">🎯</div>
+              <h3>No goals set yet</h3>
+              <p>Set your first goal and start tracking!</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================== -->
+        <!-- MEMORIES               -->
+        <!-- ====================== -->
+        <section class="section-page" id="section-memories">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h2>⭐ Memory Vault</h2>
+              <p>Cherish your favorite moments forever</p>
+            </div>
+            <button class="btn btn-primary" id="btn-add-memory">➕ Add Memory</button>
+          </div>
+          <div class="memories-grid" id="memories-list">
+            <div class="empty-state">
+              <div class="empty-state-icon">⭐</div>
+              <h3>Vault is empty</h3>
+              <p>Capture your first precious memory!</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================== -->
+        <!-- DOCUMENTS              -->
+        <!-- ====================== -->
+        <section class="section-page" id="section-documents">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h2>📄 Documents</h2>
+              <p>Store references to your important documents</p>
+            </div>
+            <button class="btn btn-primary" id="btn-add-document">➕ Add Document</button>
+          </div>
+          <div class="cards-grid" id="documents-list">
+            <div class="empty-state">
+              <div class="empty-state-icon">📄</div>
+              <h3>No documents yet</h3>
+              <p>Add your important document references</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================== -->
+        <!-- PRIVATE FOLDERS        -->
+        <!-- ====================== -->
+        <section class="section-page" id="section-folders">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h2>🔒 Private Folders</h2>
+              <p>Password-protected spaces for your most sensitive data</p>
+            </div>
+            <button class="btn btn-primary" id="btn-create-folder">🔒 Create Private Folder</button>
+          </div>
+          <div class="folders-grid" id="folders-grid">
+            <div class="empty-state" style="grid-column:1/-1;">
+              <div class="empty-state-icon">🔒</div>
+              <h3>No private folders yet</h3>
+              <p>Create your first secure, password-protected folder</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================== -->
+        <!-- SETTINGS               -->
+        <!-- ====================== -->
+        <section class="section-page" id="section-settings">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h2>⚙️ Settings</h2>
+              <p>Manage your account preferences</p>
+            </div>
+          </div>
+
+          <!-- Account Info -->
+          <div class="glass-card mb-6">
+            <h3 style="margin-bottom:var(--space-5);">📋 Account Information</h3>
+            <form id="settings-account-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" name="fullName" id="settings-fullname" class="form-input" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Username</label>
+                  <input type="text" name="username" id="settings-username" class="form-input" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" id="settings-email" class="form-input" readonly style="opacity:0.5;cursor:not-allowed;" />
+                <small class="text-muted" style="font-size:0.75rem;margin-top:4px;display:block;">Email cannot be changed for security reasons</small>
+              </div>
+              <button type="submit" class="btn btn-primary" id="btn-save-account">Save Account Info</button>
+            </form>
+          </div>
+
+          <!-- Change Password -->
+          <div class="glass-card mb-6">
+            <h3 style="margin-bottom:var(--space-5);">🔑 Change Password</h3>
+            <form id="settings-password-form">
+              <div class="form-group">
+                <label class="form-label">Current Password</label>
+                <input type="password" name="currentPassword" id="settings-current-pw" class="form-input" placeholder="Enter current password" />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">New Password</label>
+                  <input type="password" name="newPassword" id="settings-new-pw" class="form-input" placeholder="Minimum 8 characters" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Confirm New Password</label>
+                  <input type="password" name="confirmNewPassword" id="settings-confirm-pw" class="form-input" placeholder="Repeat new password" />
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" id="btn-change-password">Change Password</button>
+            </form>
+          </div>
+
+          <!-- Danger Zone -->
+          <div class="glass-card" style="border-color:rgba(248,113,113,0.2);">
+            <h3 style="margin-bottom:var(--space-3);color:var(--brand-danger);">⚠️ Danger Zone</h3>
+            <p class="text-secondary" style="font-size:0.9rem;margin-bottom:var(--space-5);">
+              Signing out will remove your session from this device.
+            </p>
+            <button class="btn btn-danger" id="btn-logout-settings">🚪 Sign Out</button>
+          </div>
+        </section>
+
+      </div><!-- end page-container -->
+    </div><!-- end main-content -->
+  </div><!-- end app-shell -->
+
+  <!-- Scripts -->
+  <script src="/js/utils.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

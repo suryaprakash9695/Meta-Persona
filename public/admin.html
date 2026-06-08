@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="MetaPersona Admin Panel" />
+  <title>Admin Panel — MetaPersona</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="/css/global.css" />
+  <link rel="stylesheet" href="/css/dashboard.css" />
+  <style>
+    .admin-table { width: 100%; border-collapse: collapse; }
+    .admin-table th, .admin-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 0.9rem;
+    }
+    .admin-table th {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+    .admin-table tbody tr { transition: background var(--transition-fast); }
+    .admin-table tbody tr:hover { background: rgba(255,255,255,0.03); }
+    .admin-table .avatar-sm {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--gradient-brand);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+    .stat-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8); }
+    .table-wrapper { overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <div class="bg-animated"></div>
+  <!-- Sidebar Overlay for mobile -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <a href="/" class="sidebar-logo">
+        <div class="logo-icon">🌟</div>
+        <span class="logo-text">MetaPersona</span>
+      </a>
+      <nav class="sidebar-nav">
+        <span class="nav-section-label">Admin Panel</span>
+        <button class="nav-item active" data-view="dashboard">📊 Dashboard</button>
+        <button class="nav-item" data-view="users">👥 Users</button>
+        <span class="nav-section-label">Actions</span>
+        <a href="/dashboard" class="nav-item">🏠 My Dashboard</a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn btn-danger btn-full btn-sm" id="btn-logout">🚪 Sign Out</button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="main-content">
+      <header class="topbar">
+        <button class="topbar-menu-btn" id="topbar-menu-btn">☰</button>
+        <h1 class="topbar-title" id="view-title">Admin Dashboard</h1>
+        <div class="topbar-actions">
+          <span class="badge badge-danger">👑 Admin</span>
+        </div>
+      </header>
+
+      <div class="page-container">
+
+        <!-- Dashboard View -->
+        <div id="view-dashboard">
+          <div class="stat-cards" id="admin-stats"></div>
+
+          <div class="glass-card">
+            <h3 style="margin-bottom:var(--space-5);">🕐 Recent Registrations</h3>
+            <div class="table-wrapper">
+              <table class="admin-table" id="recent-users-table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Joined</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-users-body">
+                  <tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:40px;">Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Users View -->
+        <div id="view-users" style="display:none;">
+          <div class="page-header">
+            <div class="page-header-text">
+              <h2>👥 All Users</h2>
+              <p>Manage all registered users</p>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <div class="table-wrapper">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Joined</th>
+                    <th>Last Login</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="all-users-body">
+                  <tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:40px;">Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/utils.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Auth.isLoggedIn()) { window.location.href = '/'; return; }
+
+      const user = Auth.getUser();
+      if (!user || user.role !== 'admin') {
+        Toast.error('Admin access required.');
+        setTimeout(() => { window.location.href = '/'; }, 1500);
+        return;
+      }
+
+      document.getElementById('btn-logout').addEventListener('click', () => Auth.logout());
+
+      // Mobile sidebar
+      const sidebarEl = document.getElementById('sidebar');
+      const overlayEl = document.getElementById('sidebar-overlay');
+
+      document.getElementById('topbar-menu-btn')?.addEventListener('click', () => {
+        sidebarEl.classList.toggle('open');
+        overlayEl.classList.toggle('visible');
+      });
+
+      overlayEl.addEventListener('click', () => {
+        sidebarEl.classList.remove('open');
+        overlayEl.classList.remove('visible');
+      });
+
+      // Close sidebar when nav item clicked on mobile
+      document.querySelectorAll('[data-view]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (window.innerWidth < 768) {
+            sidebarEl.classList.remove('open');
+            overlayEl.classList.remove('visible');
+          }
+        });
+      });
+      // View switching
+      document.querySelectorAll('[data-view]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById('view-dashboard').style.display = 'none';
+          document.getElementById('view-users').style.display = 'none';
+          document.getElementById(`view-${btn.dataset.view}`).style.display = 'block';
+          document.getElementById('view-title').textContent = btn.textContent.trim();
+
+          if (btn.dataset.view === 'users') loadAllUsers();
+        });
+      });
+
+      await loadAdminStats();
+    });
+
+    async function loadAdminStats() {
+      try {
+        const data = await api.get('/admin/stats');
+        const { stats, recentUsers } = data;
+
+        document.getElementById('admin-stats').innerHTML = `
+          <div class="stat-card"><div class="stat-icon purple">👥</div><div class="stat-value">${stats.totalUsers}</div><div class="stat-label">Total Users</div></div>
+          <div class="stat-card"><div class="stat-icon green">✅</div><div class="stat-value">${stats.activeUsers}</div><div class="stat-label">Active Users</div></div>
+          <div class="stat-card"><div class="stat-icon orange">🆕</div><div class="stat-value">${stats.newThisWeek}</div><div class="stat-label">New This Week</div></div>
+          <div class="stat-card"><div class="stat-icon blue">🔒</div><div class="stat-value">${stats.totalFolders}</div><div class="stat-label">Private Folders</div></div>
+        `;
+
+        document.getElementById('recent-users-body').innerHTML = recentUsers.map(u => `
+          <tr>
+            <td>
+              <span class="avatar-sm">${u.fullName.substring(0,2).toUpperCase()}</span>
+              ${u.fullName}
+            </td>
+            <td style="color:var(--text-secondary);">${u.email}</td>
+            <td style="color:var(--text-muted);font-size:0.8rem;">${new Date(u.createdAt).toLocaleDateString()}</td>
+            <td><span class="badge ${u.isActive ? 'badge-success' : 'badge-danger'}">${u.isActive ? 'Active' : 'Inactive'}</span></td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        Toast.error('Failed to load stats: ' + err.message);
+      }
+    }
+
+    async function loadAllUsers() {
+      const tbody = document.getElementById('all-users-body');
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:40px;"><div class="spinner" style="margin:0 auto;"></div></td></tr>';
+
+      try {
+        const data = await api.get('/admin/users');
+        tbody.innerHTML = data.users.map(u => `
+          <tr id="user-row-${u._id}">
+            <td>
+              <span class="avatar-sm">${u.fullName.substring(0,2).toUpperCase()}</span>
+              ${u.fullName}
+            </td>
+            <td style="color:var(--text-muted);">@${u.username}</td>
+            <td style="color:var(--text-secondary);">${u.email}</td>
+            <td style="color:var(--text-muted);font-size:0.8rem;">${new Date(u.createdAt).toLocaleDateString()}</td>
+            <td style="color:var(--text-muted);font-size:0.8rem;">${u.lastLogin ? new Date(u.lastLogin).toLocaleDateString() : 'Never'}</td>
+            <td><span class="badge ${u.isActive ? 'badge-success' : 'badge-danger'}">${u.isActive ? 'Active' : 'Inactive'}</span></td>
+            <td>
+              <div style="display:flex;gap:6px;">
+                <button class="btn btn-secondary btn-sm" onclick="toggleUser('${u._id}','${u.isActive}')" title="${u.isActive ? 'Deactivate' : 'Activate'}">
+                  ${u.isActive ? '🚫 Deactivate' : '✅ Activate'}
+                </button>
+                <button class="btn btn-danger btn-sm" onclick="deleteUser('${u._id}','${u.fullName}')">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        Toast.error('Failed to load users: ' + err.message);
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--brand-danger);padding:40px;">${err.message}</td></tr>`;
+      }
+    }
+
+    async function toggleUser(userId, currentActive) {
+      try {
+        const res = await api.put(`/admin/users/${userId}/toggle-active`, {});
+        Toast.success(`User ${res.user.isActive ? 'activated' : 'deactivated'}`);
+        await loadAllUsers();
+      } catch (err) {
+        Toast.error(err.message);
+      }
+    }
+
+    async function deleteUser(userId, name) {
+      const confirmed = await confirmAction(`Permanently delete user "${name}" and all their data?`);
+      if (!confirmed) return;
+      try {
+        await api.delete(`/admin/users/${userId}`);
+        Toast.success('User deleted successfully!');
+        document.getElementById(`user-row-${userId}`)?.remove();
+      } catch (err) {
+        Toast.error(err.message);
+      }
+    }
+  </script>
+</body>
+</html>

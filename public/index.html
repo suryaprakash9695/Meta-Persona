@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="MetaPersona — The premium digital life management platform. Store, organize and protect your complete personal life in one beautiful dashboard." />
+  <title>MetaPersona — Your Digital Life, Elevated</title>
+
+  <!-- Preconnect for Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/global.css" />
+  <link rel="stylesheet" href="/css/landing.css" />
+
+  <style>
+    /* Screen-only loading splash */
+    #loading-splash {
+      position: fixed;
+      inset: 0;
+      background: var(--color-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      gap: 20px;
+      transition: opacity 0.4s ease;
+    }
+    #loading-splash .splash-logo {
+      width: 64px;
+      height: 64px;
+      background: var(--gradient-brand);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      animation: logoPulse 1.5s ease-in-out infinite;
+      box-shadow: 0 0 30px rgba(124,111,245,0.4);
+    }
+    #loading-splash p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading Splash -->
+  <div id="loading-splash">
+    <div class="splash-logo">🌟</div>
+    <div class="spinner"></div>
+    <p>Loading MetaPersona...</p>
+  </div>
+
+  <!-- Animated Background -->
+  <div class="bg-animated"></div>
+
+  <!-- ======================== -->
+  <!-- LANDING PAGE             -->
+  <!-- ======================== -->
+  <main class="landing-page" id="landing-page">
+
+    <!-- Floating Preview Cards -->
+    <div class="floating-cards">
+      <div class="float-card float-card-1">
+        <div class="float-card-icon">📚</div>
+        <div class="float-card-text">
+          <strong>Education Vault</strong>
+          <span>3 degrees tracked</span>
+        </div>
+      </div>
+      <div class="float-card float-card-2">
+        <div class="float-card-icon">🎯</div>
+        <div class="float-card-text">
+          <strong>Goal Achieved</strong>
+          <span>Launch MetaPersona</span>
+        </div>
+      </div>
+      <div class="float-card float-card-3">
+        <div class="float-card-icon">🔒</div>
+        <div class="float-card-text">
+          <strong>Private Folder</strong>
+          <span>Encrypted & Secure</span>
+        </div>
+      </div>
+      <div class="float-card float-card-4">
+        <div class="float-card-icon">⭐</div>
+        <div class="float-card-text">
+          <strong>Memory Added</strong>
+          <span>Best day of my life</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Content -->
+    <div class="landing-content">
+      <div class="landing-logo">
+        <div class="logo-icon">🌟</div>
+        <span class="logo-text">MetaPersona</span>
+      </div>
+
+      <h1 class="landing-headline">
+        Your Digital Life,<br />
+        <span class="gradient-text">Beautifully Organized</span>
+      </h1>
+
+      <p class="landing-sub">
+        The premium digital life management platform. Store your education, career,
+        memories, goals, and private files in one beautifully crafted, secure dashboard.
+      </p>
+
+      <div class="landing-actions">
+        <button class="btn btn-primary btn-lg" id="btn-get-started">
+          ✨ Get Started Free
+        </button>
+        <button class="btn btn-secondary btn-lg" id="btn-sign-in">
+          Sign In
+        </button>
+      </div>
+
+      <div class="landing-features">
+        <div class="feature-pill"><span>🔐</span> End-to-End Secure</div>
+        <div class="feature-pill"><span>📱</span> Mobile First</div>
+        <div class="feature-pill"><span>⚡</span> Instant Save</div>
+        <div class="feature-pill"><span>🎨</span> Premium Design</div>
+        <div class="feature-pill"><span>🌐</span> Works Anywhere</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ======================== -->
+  <!-- AUTH MODAL               -->
+  <!-- ======================== -->
+  <div class="modal-overlay hidden" id="auth-overlay">
+    <div class="modal auth-modal" role="dialog" aria-modal="true" aria-label="Authentication">
+
+      <!-- Logo -->
+      <div class="auth-logo">
+        <div class="logo-icon" style="margin:0 auto var(--space-3) auto;width:48px;height:48px;background:var(--gradient-brand);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:var(--shadow-glow);">🌟</div>
+        <div class="logo-text" style="font-family:var(--font-heading);font-size:1.5rem;font-weight:800;background:var(--gradient-brand);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">MetaPersona</div>
+      </div>
+
+      <!-- Tab Toggle -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" aria-controls="form-login">Sign In</button>
+        <button class="auth-tab" id="tab-signup" aria-controls="form-signup">Sign Up</button>
+      </div>
+
+      <!-- ---- LOGIN FORM ---- -->
+      <div class="auth-form active" id="form-login">
+        <div class="form-message" id="login-message"></div>
+        <form id="login-form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="login-identifier">Email or Username</label>
+            <div class="form-input-icon">
+              <em class="icon">👤</em>
+              <input
+                type="text"
+                id="login-identifier"
+                name="identifier"
+                class="form-input"
+                placeholder="your@email.com or username"
+                autocomplete="username"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <div class="form-input-icon">
+              <em class="icon">🔑</em>
+              <input
+                type="password"
+                id="login-password"
+                name="password"
+                class="form-input"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full btn-lg" id="btn-login">
+            Sign In to MetaPersona
+          </button>
+        </form>
+
+        <div class="auth-footer-link">
+          Don't have an account?
+          <button id="switch-to-signup">Sign up for free</button>
+        </div>
+      </div>
+
+      <!-- ---- SIGNUP FORM ---- -->
+      <div class="auth-form" id="form-signup">
+        <div class="form-message" id="signup-message"></div>
+        <form id="signup-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="signup-fullname">Full Name</label>
+              <input
+                type="text"
+                id="signup-fullname"
+                name="fullName"
+                class="form-input"
+                placeholder="John Doe"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="signup-username">Username</label>
+              <input
+                type="text"
+                id="signup-username"
+                name="username"
+                class="form-input"
+                placeholder="john_doe"
+                autocomplete="username"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signup-email">Email Address</label>
+            <div class="form-input-icon">
+              <em class="icon">📧</em>
+              <input
+                type="email"
+                id="signup-email"
+                name="email"
+                class="form-input"
+                placeholder="john@example.com"
+                autocomplete="email"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signup-password">Password</label>
+            <div class="form-input-icon">
+              <em class="icon">🔑</em>
+              <input
+                type="password"
+                id="signup-password"
+                name="password"
+                class="form-input"
+                placeholder="Minimum 8 characters"
+                autocomplete="new-password"
+                required
+              />
+            </div>
+            <div class="password-strength" id="password-strength-indicator" style="display:none;">
+              <div class="strength-bar">
+                <div class="strength-segment" id="str-1"></div>
+                <div class="strength-segment" id="str-2"></div>
+                <div class="strength-segment" id="str-3"></div>
+                <div class="strength-segment" id="str-4"></div>
+              </div>
+              <span class="strength-text" id="strength-text"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signup-confirm">Confirm Password</label>
+            <div class="form-input-icon">
+              <em class="icon">🔒</em>
+              <input
+                type="password"
+                id="signup-confirm"
+                name="confirmPassword"
+                class="form-input"
+                placeholder="Repeat your password"
+                autocomplete="new-password"
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full btn-lg" id="btn-signup">
+            Create My MetaPersona
+          </button>
+        </form>
+
+        <div class="auth-footer-link">
+          Already have an account?
+          <button id="switch-to-login">Sign in</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/js/utils.js"></script>
+  <script src="/js/landing.js"></script>
+</body>
+</html>
